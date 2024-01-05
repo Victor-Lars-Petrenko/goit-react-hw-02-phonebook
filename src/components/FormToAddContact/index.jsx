@@ -1,1 +1,0 @@
-export { FormToAddContact } from './FormToAddContact';

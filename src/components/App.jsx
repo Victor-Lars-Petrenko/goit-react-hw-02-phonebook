@@ -1,35 +1,74 @@
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 
-import { SectionContactsBook } from './SectionContactsBook';
-import { FormToAddContact } from './FormToAddContact';
-import { ContactsList } from './ContactsList';
+import { Div, Heading } from './App.styled';
+
+import { ContactForm } from './ContactForm';
+import { Filter } from './Filter';
+import { ContactList } from './ContactList';
 
 export class App extends Component {
   state = {
     contacts: [],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleSubmit = e => {
-    console.log(this.state);
+  handleSubmit = (e, name, number) => {
     e.preventDefault();
-    const { name, number } = e.currentTarget;
+
+    const { contacts } = this.state;
+    const isExist = contacts.map(({ name }) => name).includes(name);
+
+    if (isExist) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
+
     this.setState(({ contacts }) => ({
-      contacts: [...contacts, `${name.value} ${number.value}`],
-      filter: '',
-      name: `${name.value}`,
-      number: `${number.value}`,
+      contacts: [
+        ...contacts,
+        { id: `${nanoid()}`, name: `${name}`, number: `${number}` },
+      ],
     }));
   };
 
+  handleChange = e => {
+    const { value } = e.target;
+    this.setState({
+      filter: `${value}`,
+    });
+  };
+
+  filterContacts = () => {
+    const { contacts, filter } = this.state;
+    if (filter === '') {
+      return contacts;
+    }
+    const filtered = contacts.filter(({ name }) =>
+      name.toLowerCase().includes(filter.toLowerCase())
+    );
+    return filtered;
+  };
+
+  handleClick = e => {
+    const { contacts } = this.state;
+    const updatedContacts = contacts.filter(({ id }) => id !== e.target.id);
+    this.setState({
+      contacts: [...updatedContacts],
+    });
+  };
+
   render() {
+    const { filter } = this.state;
     return (
-      <SectionContactsBook>
-        <FormToAddContact onSubmit={this.handleSubmit} />
-        <ContactsList items={this.state.contacts} />
-      </SectionContactsBook>
+      <Div>
+        <Heading>Phonebook</Heading>
+        <ContactForm onSubmit={this.handleSubmit} />
+
+        <Heading>Contacts</Heading>
+        <Filter onChange={this.handleChange} filterValue={filter} />
+        <ContactList items={this.filterContacts()} onClick={this.handleClick} />
+      </Div>
     );
   }
 }

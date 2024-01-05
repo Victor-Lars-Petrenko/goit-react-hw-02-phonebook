@@ -1,1 +1,0 @@
-export { SectionContactsBook } from './SectionContactsBook';

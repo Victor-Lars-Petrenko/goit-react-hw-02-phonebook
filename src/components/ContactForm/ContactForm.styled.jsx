@@ -7,6 +7,7 @@ export const Form = styled.form`
   padding: 24px;
   background-color: DodgerBlue;
   border-radius: 4px;
+  margin-bottom: 20px;
 `;
 
 export const InputWrap = styled.div`
@@ -35,6 +36,7 @@ export const FormInput = styled.input`
 `;
 
 export const Button = styled.button`
+  display: block;
   width: 100px;
   padding: 4px;
   border-radius: 12px;
