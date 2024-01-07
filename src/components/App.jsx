@@ -17,7 +17,7 @@ export class App extends Component {
     e.preventDefault();
 
     const { contacts } = this.state;
-    const isExist = contacts.map(({ name }) => name).includes(name);
+    const isExist = contacts.map(({ name }) => name.toLowerCase()).includes(name.toLowerCase());
 
     if (isExist) {
       alert(`${name} is already in contacts.`);
